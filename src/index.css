@@ -57,3 +57,253 @@ button { cursor: pointer; }
   background: #fff7df;
   border: 2px solid #2f241d;
 }
+/* =========================================================
+   PHOTO UPLOAD / EDITOR
+   Page: Add/Edit Adventure
+   Creates the field-journal style drag-and-drop photo area and sortable photo cards.
+   ========================================================= */
+.photo-dropzone {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  gap: 0.75rem;
+  border: 3px dashed #2f2a25;
+  border-radius: 1.75rem;
+  background:
+    linear-gradient(rgba(47, 42, 37, 0.055) 1px, transparent 1px),
+    #fffdf5;
+  background-size: 100% 2rem;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.photo-dropzone:hover,
+.photo-dropzone-active {
+  transform: translateY(-2px) rotate(-0.4deg);
+  background-color: #fff7e8;
+  box-shadow: 5px 5px 0 #2f2a25;
+}
+
+.photo-dropzone-icon {
+  display: grid;
+  height: 5.5rem;
+  width: 5.5rem;
+  place-items: center;
+  border: 3px solid #2f2a25;
+  border-radius: 999px;
+  background: #8ed3e8;
+  box-shadow: 5px 5px 0 #2f2a25;
+}
+
+.photo-sort-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1rem;
+}
+
+.photo-sort-card {
+  position: relative;
+  min-height: 15rem;
+  overflow: hidden;
+  border: 3px solid #2f2a25;
+  border-radius: 1.5rem;
+  background: white;
+  box-shadow: 5px 5px 0 rgba(47, 42, 37, 0.9);
+  cursor: grab;
+}
+
+.photo-sort-card:active {
+  cursor: grabbing;
+}
+
+.photo-cover-card {
+  transform: rotate(-1deg);
+  outline: 4px solid rgba(247, 201, 95, 0.75);
+}
+
+.photo-sort-card img {
+  height: 15rem;
+  width: 100%;
+  object-fit: cover;
+}
+
+.photo-sort-toolbar {
+  position: absolute;
+  inset: auto 0.7rem 0.7rem 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* =========================================================
+   MAP LAYER FIX
+   Pages: Add/Edit Adventure and Map
+   Keeps Leaflet tiles and controls below the sticky navbar while scrolling.
+   ========================================================= */
+.travel-map,
+.leaflet-container {
+  position: relative;
+  z-index: 0;
+}
+
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1;
+}
+
+.leaflet-popup-pane {
+  z-index: 2;
+}
+
+/* =========================================================
+   FIELD NOTES STATS NOTEBOOK
+   Page: Stats
+   Turns the stats dashboard into a two-page field notebook with flip-style navigation.
+   ========================================================= */
+.field-notebook {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+  gap: 1.25rem;
+  border: 4px solid #2f2a25;
+  border-radius: 2rem;
+  background: #2f2a25;
+  box-shadow: 10px 10px 0 #2f2a25;
+  padding: 1.25rem;
+}
+
+.notebook-tabs {
+  position: absolute;
+  right: 1.25rem;
+  top: -2.2rem;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.notebook-tabs button {
+  border: 2px solid #2f2a25;
+  border-bottom: 0;
+  border-radius: 0.9rem 0.9rem 0 0;
+  background: #9fbd8f;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  box-shadow: 3px 0 0 #2f2a25;
+}
+
+.notebook-tabs button.active {
+  background: #f7c95f;
+}
+
+.notebook-page {
+  display: flex;
+  min-height: 36rem;
+  flex-direction: column;
+  border: 3px solid #2f2a25;
+  border-radius: 1.4rem;
+  background:
+    linear-gradient(rgba(47, 42, 37, 0.08) 1px, transparent 1px),
+    #fffdf5;
+  background-size: 100% 2rem;
+  padding: 1.35rem;
+}
+
+.notebook-page-left {
+  transform: none;
+}
+
+.notebook-page-right {
+  transform: none;
+}
+
+.handwritten-note {
+  font-family: "Trebuchet MS", ui-rounded, system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(47, 42, 37, 0.58);
+}
+
+.field-note-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  border: 2px solid #2f2a25;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 0.9rem 1rem;
+  font-weight: 900;
+  box-shadow: 3px 3px 0 rgba(47, 42, 37, 0.75);
+}
+
+.field-stat-card {
+  border: 3px solid #2f2a25;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 1.25rem;
+  text-align: center;
+  box-shadow: 4px 4px 0 rgba(47, 42, 37, 0.82);
+}
+
+.field-stat-card:nth-child(2n) {
+  background: rgba(247, 201, 95, 0.28);
+}
+
+.field-chart-card {
+  border: 3px solid #2f2a25;
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.76);
+  padding: 1.25rem;
+  box-shadow: 5px 5px 0 rgba(47, 42, 37, 0.85);
+}
+
+.field-chart-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.notebook-nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 2px solid #2f2a25;
+  border-radius: 999px;
+  background: #fff7e8;
+  padding: 0.7rem 1rem;
+  font-weight: 900;
+  box-shadow: 3px 3px 0 #2f2a25;
+}
+
+.notebook-nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+@media (max-width: 900px) {
+  .field-notebook {
+    grid-template-columns: 1fr;
+  }
+
+  .notebook-tabs {
+    position: static;
+    order: -1;
+    flex-wrap: wrap;
+    margin-bottom: -0.5rem;
+  }
+
+  .notebook-tabs button {
+    border-bottom: 2px solid #2f2a25;
+    border-radius: 999px;
+  }
+
+  .notebook-page-left,
+  .notebook-page-right {
+    transform: none;
+  }
+}

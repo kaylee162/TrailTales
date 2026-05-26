@@ -210,7 +210,7 @@ export default function LocationPicker({
           center={selectedPosition ?? DEFAULT_CENTER}
           zoom={selectedPosition ? 10 : 5}
           scrollWheelZoom={false}
-          className="h-85 w-full"
+          className="travel-map h-85 w-full"
         >
           <TileLayer
             attribution='&copy; OpenStreetMap contributors'

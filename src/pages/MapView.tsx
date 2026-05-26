@@ -53,7 +53,7 @@ export default function MapView() {
             center={mapCenter}
             zoom={adventuresWithPins.length ? 6 : 5}
             scrollWheelZoom
-            className="h-[590px] w-full rounded-[2rem] border-3 border-ink"
+            className="travel-map h-[590px] w-full rounded-[2rem] border-3 border-ink"
           >
             <TileLayer
               attribution='&copy; OpenStreetMap contributors'

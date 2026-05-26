@@ -24,8 +24,13 @@ export default function Landing() {
           <h1 className="font-display text-6xl font-black leading-[0.95] md:text-8xl">Log the places you never want to forget.</h1>
           <p className="mt-6 max-w-2xl text-xl font-semibold leading-9 text-ink/75">A cozy adventure journal for trips, hikes, maps, photos, stats, and favorite little moments.</p>
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link to="/adventures/new" className="rounded-2xl border-3 border-ink bg-coral px-7 py-4 text-lg font-black text-white shadow-hard transition hover:-translate-y-1">Start logging</Link>
-            <Link to="/adventures" className="rounded-2xl border-3 border-ink bg-paper px-7 py-4 text-lg font-black shadow-hard transition hover:-translate-y-1">Explore demo</Link>
+            <Link
+              to="/adventures/new"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })}
+              className="rounded-2xl border-3 border-ink bg-coral px-7 py-4 text-lg font-black text-white shadow-hard transition hover:-translate-y-1"
+            >
+              Start logging
+            </Link>
           </div>
         </motion.div>
 
@@ -33,7 +38,6 @@ export default function Landing() {
           <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full border-3 border-ink bg-sun shadow-hard-sm" />
           <div className="scrapbook-card map-grid relative p-4">
             <img src={hero} alt="Adventure journal map collage" className="h-[420px] w-full rounded-3xl object-cover" />
-            <div className="polaroid absolute -bottom-8 left-8 w-44 rotate-[-6deg]"><div className="h-28 rounded-xl bg-sky" /><p className="mt-3 text-center font-display text-2xl">Blue Ridge</p></div>
             <div className="sticker absolute right-8 top-8 px-4 py-2 text-sm font-black">42 miles logged</div>
           </div>
         </motion.div>

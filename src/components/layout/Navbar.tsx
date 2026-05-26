@@ -11,7 +11,7 @@ const links = [
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 border-b-4 border-ink bg-cream/90 backdrop-blur">
+    <nav className="sticky top-0 z-[1000] border-b-4 border-ink bg-cream/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-4">
         <Link to="/" className="flex items-center gap-2 text-xl font-black tracking-tight">
           <span className="grid h-11 w-11 place-items-center rounded-full border-3 border-ink bg-sun shadow-hard-sm">
