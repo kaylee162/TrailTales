@@ -62,7 +62,8 @@ export default function LocationPicker({
   const [error, setError] = useState('')
 
   const selectedPosition: LatLngExpression | null =
-    latitude && longitude ? [latitude, longitude] : null
+    typeof latitude === 'number' && typeof longitude === 'number' ? [latitude, longitude] : null
+
 
   const searchLocation = async () => {
     if (query.trim().length < 2) return
@@ -178,7 +179,7 @@ export default function LocationPicker({
           </div>
 
           {(results.length > 0 || isSearching || error) && (
-            <div className="absolute left-4 right-4 top-21 z-900 overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
+            <div className="absolute left-4 right-4 top-[5.25rem] z-[900] overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
               {isSearching && (
                 <p className="px-4 py-3 text-sm font-black text-ink/60">
                   Searching the map...
@@ -210,7 +211,7 @@ export default function LocationPicker({
           center={selectedPosition ?? DEFAULT_CENTER}
           zoom={selectedPosition ? 10 : 5}
           scrollWheelZoom={false}
-          className="travel-map h-85 w-full"
+          className="travel-map h-[21.25rem] w-full"
         >
           <TileLayer
             attribution='&copy; OpenStreetMap contributors'
@@ -233,7 +234,7 @@ export default function LocationPicker({
           Picked: {location || 'Custom map point'}
           {state ? ` · ${state}` : ''}
           {country ? ` · ${country}` : ''}
-          {latitude && longitude
+          {typeof latitude === 'number' && typeof longitude === 'number'
             ? ` · ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
             : ''}
         </div>

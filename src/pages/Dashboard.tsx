@@ -4,6 +4,7 @@ import AdventureCard from '../components/ui/AdventureCard'
 import PageHeader from '../components/ui/PageHeader'
 import { useAdventures } from '../context/AdventureContext'
 import { getAdventureStats } from '../lib/stats'
+import { FALLBACK_ADVENTURE_PHOTO } from '../lib/placeholders'
 
 export default function Dashboard() {
   const { adventures } = useAdventures()
@@ -24,11 +25,22 @@ export default function Dashboard() {
       <section className="mt-8 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
         <div>
           <div className="mb-4 flex items-center justify-between"><h2 className="text-3xl font-black">Recent pages</h2><Link to="/adventures" className="font-black text-coral">View all</Link></div>
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{recent.map((adventure) => <AdventureCard key={adventure.id} adventure={adventure} />)}</div>
+          {recent.length ? (
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {recent.map((adventure) => <AdventureCard key={adventure.id} adventure={adventure} />)}
+            </div>
+          ) : (
+            <div className="scrapbook-card bg-paper p-8 text-center">
+              <p className="text-4xl">📍</p>
+              <h3 className="mt-3 text-2xl font-black">No adventures yet</h3>
+              <p className="mt-2 font-semibold text-ink/70">Start with one trip, hike, park, or favorite local spot.</p>
+              <Link to="/adventures/new" className="mt-5 inline-flex rounded-2xl border-2 border-ink bg-coral px-5 py-3 font-black text-white shadow-hard-xs">Add your first adventure</Link>
+            </div>
+          )}
         </div>
         <aside className="scrapbook-card map-grid p-6">
           <p className="sticker mb-4 inline-flex px-3 py-1 text-sm font-black">favorite memory</p>
-          {stats.favorite ? <><img src={stats.favorite.coverPhoto || stats.favorite.photos[0]} alt="" className="h-56 w-full rounded-3xl border-3 border-ink object-cover" /><h3 className="mt-5 text-3xl font-black">{stats.favorite.title}</h3><p className="mt-2 font-semibold text-ink/70">{stats.favorite.favoriteMoment}</p></> : <p>No adventures yet.</p>}
+          {stats.favorite ? <><img src={stats.favorite.coverPhoto || stats.favorite.photos[0] || FALLBACK_ADVENTURE_PHOTO} alt="" className="h-56 w-full rounded-3xl border-3 border-ink object-cover" /><h3 className="mt-5 text-3xl font-black">{stats.favorite.title}</h3><p className="mt-2 font-semibold text-ink/70">{stats.favorite.favoriteMoment}</p></> : <p>No adventures yet.</p>}
         </aside>
       </section>
     </>
