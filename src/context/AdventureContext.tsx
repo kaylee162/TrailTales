@@ -1,13 +1,13 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import type { Adventure } from '../types/adventure'
 import { getAdventures, saveAdventures } from '../lib/adventureStorage'
 
-type AdventureContextType = {
+export type AdventureContextType = {
   adventures: Adventure[]
-  addAdventure: (adventure: Omit<Adventure, 'id'>) => string
-  updateAdventure: (id: string, adventure: Omit<Adventure, 'id'>) => void
-  deleteAdventure: (id: string) => void
+  addAdventure: (adventure: Omit<Adventure, 'id'>) => string | null
+  updateAdventure: (id: string, adventure: Omit<Adventure, 'id'>) => boolean
+  deleteAdventure: (id: string) => boolean
   getAdventureById: (id: string) => Adventure | undefined
 }
 
@@ -16,29 +16,50 @@ const AdventureContext = createContext<AdventureContextType | null>(null)
 export function AdventureProvider({ children }: { children: React.ReactNode }) {
   const [adventures, setAdventures] = useState<Adventure[]>(() => getAdventures())
 
-  useEffect(() => {
-    saveAdventures(adventures)
-  }, [adventures])
+  const persistAdventures = useCallback((nextAdventures: Adventure[]) => {
+    const didSave = saveAdventures(nextAdventures)
 
-  const addAdventure = (adventure: Omit<Adventure, 'id'>) => {
-    const id = uuidv4()
-    setAdventures((current) => [{ ...adventure, id }, ...current])
-    return id
-  }
+    if (didSave) {
+      setAdventures(nextAdventures)
+    }
 
-  const updateAdventure = (id: string, adventure: Omit<Adventure, 'id'>) => {
-    setAdventures((current) => current.map((item) => (item.id === id ? { ...adventure, id } : item)))
-  }
+    return didSave
+  }, [])
 
-  const deleteAdventure = (id: string) => {
-    setAdventures((current) => current.filter((item) => item.id !== id))
-  }
+  const addAdventure = useCallback(
+    (adventure: Omit<Adventure, 'id'>) => {
+      const id = uuidv4()
+      const nextAdventures = [{ ...adventure, id }, ...adventures]
 
-  const getAdventureById = (id: string) => adventures.find((adventure) => adventure.id === id)
+      return persistAdventures(nextAdventures) ? id : null
+    },
+    [adventures, persistAdventures],
+  )
+
+  const updateAdventure = useCallback(
+    (id: string, adventure: Omit<Adventure, 'id'>) => {
+      const nextAdventures = adventures.map((item) => (item.id === id ? { ...adventure, id } : item))
+      return persistAdventures(nextAdventures)
+    },
+    [adventures, persistAdventures],
+  )
+
+  const deleteAdventure = useCallback(
+    (id: string) => {
+      const nextAdventures = adventures.filter((item) => item.id !== id)
+      return persistAdventures(nextAdventures)
+    },
+    [adventures, persistAdventures],
+  )
+
+  const getAdventureById = useCallback(
+    (id: string) => adventures.find((adventure) => adventure.id === id),
+    [adventures],
+  )
 
   const value = useMemo(
     () => ({ adventures, addAdventure, updateAdventure, deleteAdventure, getAdventureById }),
-    [adventures]
+    [adventures, addAdventure, updateAdventure, deleteAdventure, getAdventureById],
   )
 
   return <AdventureContext.Provider value={value}>{children}</AdventureContext.Provider>

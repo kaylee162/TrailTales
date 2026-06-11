@@ -26,7 +26,6 @@ export default function Landing() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               to="/adventures/new"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })}
               className="rounded-2xl border-3 border-ink bg-coral px-7 py-4 text-lg font-black text-white shadow-hard transition hover:-translate-y-1"
             >
               Start logging

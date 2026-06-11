@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { ChangeEvent, DragEvent, FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ImagePlus, Trash2, GripVertical, Star } from 'lucide-react'
+import { AlertCircle, ImagePlus, Trash2, GripVertical, Star } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import { adventureCategories, categoryLabels } from '../lib/constants'
 import { compressImage } from '../lib/imageUtils'
@@ -49,6 +49,7 @@ export default function AdventureForm() {
   const [tagText, setTagText] = useState(existing?.tags.join(', ') ?? '')
   const [isDraggingUpload, setIsDraggingUpload] = useState(false)
   const [draggedPhotoIndex, setDraggedPhotoIndex] = useState<number | null>(null)
+  const [saveError, setSaveError] = useState('')
 
   const update = <K extends keyof Omit<Adventure, 'id'>>(
     key: K,
@@ -60,9 +61,16 @@ export default function AdventureForm() {
 
     if (!selectedFiles.length) return
 
+    const openSlots = 8 - form.photos.length
+
+    if (openSlots <= 0) {
+      alert('You can save up to 8 photos per adventure. Delete one before adding another.')
+      return
+    }
+
     try {
       const compressedPhotos = await Promise.all(
-        selectedFiles.map((file) => compressImage(file)),
+        selectedFiles.slice(0, openSlots).map((file) => compressImage(file)),
       )
 
       setForm((current) => {
@@ -90,9 +98,9 @@ export default function AdventureForm() {
     addPhotos(Array.from(event.dataTransfer.files))
   }
 
-  const deletePhoto = (photoToDelete: string) => {
+  const deletePhoto = (photoIndex: number) => {
     setForm((current) => {
-      const photos = current.photos.filter((photo) => photo !== photoToDelete)
+      const photos = current.photos.filter((_, index) => index !== photoIndex)
 
       return {
         ...current,
@@ -120,6 +128,7 @@ export default function AdventureForm() {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
+    setSaveError('')
 
     const cleanedPhotos = form.photos.length
       ? form.photos
@@ -129,6 +138,16 @@ export default function AdventureForm() {
 
     const cleaned = {
       ...form,
+      title: form.title.trim(),
+      location: form.location.trim(),
+      description: form.description.trim(),
+      journal: form.journal.trim(),
+      favoriteMoment: form.favoriteMoment.trim(),
+      mood: form.mood.trim(),
+      state: form.state?.trim(),
+      country: form.country?.trim(),
+      miles: Math.max(0, Number(form.miles) || 0),
+      rating: Math.min(5, Math.max(1, Number(form.rating) || 1)),
       tags: tagText
         .split(',')
         .map((tag) => tag.trim())
@@ -138,11 +157,21 @@ export default function AdventureForm() {
     }
 
     if (existing && id) {
-      updateAdventure(id, cleaned)
-      navigate(`/adventures/${id}`)
+      const didSave = updateAdventure(id, cleaned)
+
+      if (didSave) {
+        navigate(`/adventures/${id}`)
+      } else {
+        setSaveError('Your changes were not saved. Try removing a few photos or using smaller photos.')
+      }
     } else {
       const newId = addAdventure(cleaned)
-      navigate(`/adventures/${newId}`)
+
+      if (newId) {
+        navigate(`/adventures/${newId}`)
+      } else {
+        setSaveError('This adventure was not saved. Try removing a few photos or using smaller photos.')
+      }
     }
   }
 
@@ -155,6 +184,12 @@ export default function AdventureForm() {
       />
 
       <form onSubmit={handleSubmit} className="scrapbook-card grid gap-6 bg-paper p-6 lg:grid-cols-2">
+        {saveError && (
+          <div className="flex items-start gap-3 rounded-2xl border-2 border-ink bg-sun/35 p-4 font-bold text-ink lg:col-span-2">
+            <AlertCircle className="mt-0.5 shrink-0 text-coral" size={20} />
+            <p>{saveError}</p>
+          </div>
+        )}
         <Field label="Title"><input required value={form.title} onChange={(e) => update('title', e.target.value)} /></Field>
         <Field label="Date"><input type="date" required value={form.date} onChange={(e) => update('date', e.target.value)} /></Field>
         <Field label="Category"><select value={form.category} onChange={(e) => update('category', e.target.value as AdventureCategory)}>{adventureCategories.map((cat) => <option key={cat} value={cat}>{categoryLabels[cat]}</option>)}</select></Field>
@@ -225,7 +260,7 @@ export default function AdventureForm() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => deletePhoto(photo)}
+                      onClick={() => deletePhoto(index)}
                       className="grid h-9 w-9 place-items-center rounded-full border-2 border-ink bg-coral text-white shadow-hard-xs"
                       aria-label="Delete photo"
                     >

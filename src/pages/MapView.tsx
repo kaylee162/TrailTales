@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css'
 import PageHeader from '../components/ui/PageHeader'
 import { categoryEmoji } from '../lib/constants'
 import { useAdventures } from '../context/AdventureContext'
+import { FALLBACK_ADVENTURE_PHOTO } from '../lib/placeholders'
 
 const scrapbookPin = new Icon({
   iconUrl:
@@ -23,7 +24,7 @@ const scrapbookPin = new Icon({
 export default function MapView() {
   const { adventures } = useAdventures()
   const adventuresWithPins = adventures.filter(
-    (adventure) => adventure.latitude && adventure.longitude,
+    (adventure) => typeof adventure.latitude === 'number' && typeof adventure.longitude === 'number',
   )
 
   const [activeId, setActiveId] = useState(adventuresWithPins[0]?.id)
@@ -32,7 +33,7 @@ export default function MapView() {
   const mapCenter = useMemo<[number, number]>(() => {
     const firstPinned = adventuresWithPins[0]
 
-    if (firstPinned?.latitude && firstPinned?.longitude) {
+    if (typeof firstPinned?.latitude === 'number' && typeof firstPinned.longitude === 'number') {
       return [firstPinned.latitude, firstPinned.longitude]
     }
 
@@ -86,7 +87,7 @@ export default function MapView() {
           {active ? (
             <>
               <img
-                src={active.coverPhoto || active.photos[0]}
+                src={active.coverPhoto || active.photos[0] || FALLBACK_ADVENTURE_PHOTO}
                 alt={active.title}
                 className="h-56 w-full rounded-3xl border-3 border-ink object-cover"
               />

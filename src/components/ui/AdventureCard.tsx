@@ -6,7 +6,7 @@ import { categoryEmoji, categoryLabels } from '../../lib/constants'
 type AdventureCardProps = { adventure: Adventure }
 
 export default function AdventureCard({ adventure }: AdventureCardProps) {
-  const photo = adventure.coverPhoto || adventure.photos[0] || 'https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=900&q=80'
+  const photo = adventure.coverPhoto || adventure.photos[0] || 'https://via.placeholder.com/400x300?text=Adventure'
 
   return (
     <article className="scrapbook-card overflow-hidden transition hover:-translate-y-1">

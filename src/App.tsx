@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useLayoutEffect } from 'react'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { AdventureProvider } from './context/AdventureContext'
 import AppLayout from './components/layout/AppLayout'
 import Landing from './pages/Landing'
@@ -16,6 +17,7 @@ function App() {
   return (
     <AdventureProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppLayout />}>
@@ -34,6 +36,16 @@ function App() {
       </BrowserRouter>
     </AdventureProvider>
   )
+}
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
+  return null
 }
 
 export default App
