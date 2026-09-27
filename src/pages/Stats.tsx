@@ -5,6 +5,9 @@ import PageHeader from '../components/ui/PageHeader'
 import { useAdventures } from '../context/AdventureContext'
 import { categoryLabels } from '../lib/constants'
 import { getAdventureStats } from '../lib/stats'
+import TopoLines from '../components/ui/TopoLines'
+
+const chartTick = { fill: '#5a6157', fontSize: 12, fontFamily: 'IBM Plex Mono, monospace' }
 
 export default function Stats() {
   const { adventures } = useAdventures()
@@ -78,13 +81,14 @@ export default function Stats() {
 
         <article className="notebook-page notebook-page-left">
           <p className="handwritten-note">TrailTales Field Notes</p>
-          <div className="rounded-3xl border-3 border-ink bg-sun/40 p-5 shadow-hard-sm">
-            <NotebookTabs size={34} />
-            <h2 className="mt-3 text-4xl font-black">{currentPage.title}</h2>
-            <p className="mt-3 font-bold leading-7 text-ink/70">{currentPage.subtitle}</p>
+          <TopoLines className="-bottom-60 -right-64 w-[640px]" color="#b9c27e" opacity={0.16} />
+          <div className="relative mt-6">
+            <NotebookTabs size={30} strokeWidth={1.6} className="text-lichen" />
+            <h2 className="mt-4 font-display text-[34px] font-medium leading-tight md:text-5xl">{currentPage.title}</h2>
+            <p className="mt-3 max-w-md leading-relaxed text-bone/75">{currentPage.subtitle}</p>
           </div>
 
-          <div className="mt-6 grid gap-4">
+          <div className="relative mt-auto grid pt-6 md:pt-10">
             <FieldNote icon={<MapPinned size={22} />} label="Places pinned" value={stats.totalAdventures} />
             <FieldNote icon={<Mountain size={22} />} label="Miles logged" value={stats.totalMiles.toFixed(1)} />
             <FieldNote icon={<NotebookTabs size={22} />} label="Photos saved" value={stats.totalPhotos} />
@@ -93,7 +97,7 @@ export default function Stats() {
 
         <article className="notebook-page notebook-page-right">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <p className="rounded-full border-2 border-ink bg-paper px-3 py-1 text-xs font-black shadow-hard-xs">
+            <p className="chip chip-outline">
               Page {page + 1} / {notebookPages.length}
             </p>
             <p className="handwritten-note">logged stats</p>
@@ -101,7 +105,7 @@ export default function Stats() {
 
           {currentPage.content}
 
-          <div className="mt-6 flex justify-between gap-3">
+          <div className="mt-auto flex justify-between gap-3 border-t border-stone pt-5">
             <button
               type="button"
               onClick={() => setPage((current) => Math.max(0, current - 1))}
@@ -127,7 +131,7 @@ export default function Stats() {
 
 function OverviewPage({ stats }: { stats: ReturnType<typeof getAdventureStats> }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4">
       <Stat label="Adventures" value={stats.totalAdventures} />
       <Stat label="Miles" value={stats.totalMiles.toFixed(1)} />
       <Stat label="States" value={stats.statesVisited} />
@@ -141,8 +145,8 @@ function OverviewPage({ stats }: { stats: ReturnType<typeof getAdventureStats> }
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="field-stat-card">
-      <p className="font-display text-5xl font-black">{value}</p>
-      <p className="font-black text-ink/65">{label}</p>
+      <p>{value}</p>
+      <p>{label}</p>
     </div>
   )
 }
@@ -168,23 +172,23 @@ function FieldChart({ title, data, type }: { title: string; data: { name: string
           <ResponsiveContainer width="100%" height="100%">
             {type === 'bar' ? (
               <BarChart data={data} margin={{ top: 10, right: 18, left: -16, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="4 4" />
-                <XAxis dataKey="name" tick={{ fontWeight: 700 }} />
-                <YAxis allowDecimals={false} tick={{ fontWeight: 700 }} />
-                <Bar dataKey="value" fill="#f27c68" radius={[10, 10, 0, 0]} />
+                <CartesianGrid stroke="#ddd5c6" vertical={false} />
+                <XAxis dataKey="name" tick={chartTick} axisLine={{ stroke: '#c9bfac' }} tickLine={false} />
+                <YAxis allowDecimals={false} tick={chartTick} axisLine={false} tickLine={false} />
+                <Bar dataKey="value" fill="#c2521b" radius={[6, 6, 0, 0]} maxBarSize={56} />
               </BarChart>
             ) : (
               <LineChart data={data} margin={{ top: 10, right: 18, left: -16, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="4 4" />
-                <XAxis dataKey="name" tick={{ fontWeight: 700 }} />
-                <YAxis allowDecimals={false} tick={{ fontWeight: 700 }} />
-                <Line type="monotone" dataKey="value" stroke="#f27c68" strokeWidth={4} dot={{ r: 6, fill: '#f7c95f', stroke: '#2f2a25', strokeWidth: 2 }} />
+                <CartesianGrid stroke="#ddd5c6" vertical={false} />
+                <XAxis dataKey="name" tick={chartTick} axisLine={{ stroke: '#c9bfac' }} tickLine={false} />
+                <YAxis allowDecimals={false} tick={chartTick} axisLine={false} tickLine={false} />
+                <Line type="monotone" dataKey="value" stroke="#c2521b" strokeWidth={2.5} dot={{ r: 5, fill: '#fbf8f2', stroke: '#c2521b', strokeWidth: 2 }} />
               </LineChart>
             )}
           </ResponsiveContainer>
         </div>
       ) : (
-        <div className="grid h-72 place-items-center rounded-3xl border-2 border-dashed border-ink/45 bg-white/60 p-6 text-center font-black text-ink/60">
+        <div className="grid h-72 place-items-center rounded-xl border border-dashed border-stone-dark bg-bone p-6 text-center font-medium text-muted">
           Add a few adventures and this page will fill itself in.
         </div>
       )}
