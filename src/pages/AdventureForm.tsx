@@ -183,10 +183,10 @@ export default function AdventureForm() {
         description="Fill in the memory, pin, stats, and photo scraps for this journal page."
       />
 
-      <form onSubmit={handleSubmit} className="scrapbook-card grid gap-6 bg-paper p-6 lg:grid-cols-2">
+      <form onSubmit={handleSubmit} className="panel grid gap-x-6 gap-y-5 p-5 md:p-8 lg:grid-cols-2">
         {saveError && (
-          <div className="flex items-start gap-3 rounded-2xl border-2 border-ink bg-sun/35 p-4 font-bold text-ink lg:col-span-2">
-            <AlertCircle className="mt-0.5 shrink-0 text-coral" size={20} />
+          <div className="flex items-start gap-3 rounded-xl border border-blaze/40 bg-[#f6e6da] p-4 font-medium text-ink lg:col-span-2">
+            <AlertCircle className="mt-0.5 shrink-0 text-blaze" size={20} />
             <p>{saveError}</p>
           </div>
         )}
@@ -214,12 +214,12 @@ export default function AdventureForm() {
         <Field label="Favorite moment" wide><input value={form.favoriteMoment} onChange={(e) => update('favoriteMoment', e.target.value)} /></Field>
 
         <section className="lg:col-span-2">
-          <div className="mb-2 flex items-end justify-between gap-3">
+          <div className="mb-3 flex items-start justify-between gap-3 sm:items-end">
             <div>
-              <p className="font-black">Photo scraps</p>
-              <p className="text-sm font-bold text-ink/60">Drag images here or browse. The first photo is always the cover image.</p>
+              <p className="field-label mb-1">Photos</p>
+              <p className="field-hint">Drag images here or browse. The first photo is always the cover image.</p>
             </div>
-            <p className="rounded-full border-2 border-ink bg-sun px-3 py-1 text-xs font-black shadow-hard-xs">{form.photos.length}/8 photos</p>
+            <p className="chip chip-outline shrink-0">{form.photos.length}/8 photos</p>
           </div>
 
           <label
@@ -232,9 +232,9 @@ export default function AdventureForm() {
             className={`photo-dropzone ${isDraggingUpload ? 'photo-dropzone-active' : ''}`}
           >
             <input className="sr-only" type="file" accept="image/*" multiple onChange={handlePhotoInput} />
-            <span className="photo-dropzone-icon"><ImagePlus size={34} /></span>
-            <span className="text-2xl font-black">Drop adventure photos here</span>
-            <span className="max-w-md text-center text-sm font-bold text-ink/60">or click to browse. Photos are compressed and saved locally in this browser.</span>
+            <span className="photo-dropzone-icon"><ImagePlus size={28} strokeWidth={1.8} /></span>
+            <span className="font-display text-xl font-medium sm:text-2xl">Drop adventure photos here</span>
+            <span className="field-hint max-w-md text-center">or click to browse. Photos are compressed and saved locally in this browser.</span>
           </label>
 
           {form.photos.length > 0 && (
@@ -254,14 +254,14 @@ export default function AdventureForm() {
                 >
                   <img src={photo} alt={`Uploaded adventure ${index + 1}`} />
                   <div className="photo-sort-toolbar">
-                    <span className="inline-flex items-center gap-1 rounded-full border-2 border-ink bg-paper px-2 py-1 text-xs font-black shadow-hard-xs">
+                    <span className={`chip ${index === 0 ? 'chip-blaze' : 'chip-dark'}`}>
                       {index === 0 ? <Star size={13} fill="currentColor" /> : <GripVertical size={13} />}
                       {index === 0 ? 'Cover' : `Photo ${index + 1}`}
                     </span>
                     <button
                       type="button"
                       onClick={() => deletePhoto(index)}
-                      className="grid h-9 w-9 place-items-center rounded-full border-2 border-ink bg-coral text-white shadow-hard-xs"
+                      className="grid h-9 w-9 place-items-center rounded-full bg-ink/80 text-bone backdrop-blur-sm transition-colors hover:bg-danger"
                       aria-label="Delete photo"
                     >
                       <Trash2 size={16} />
@@ -273,13 +273,13 @@ export default function AdventureForm() {
           )}
         </section>
 
-        <div className="flex flex-wrap gap-6 lg:col-span-2"><label className="flex items-center gap-3 font-black"><input type="checkbox" checked={form.isFavorite} onChange={(e) => update('isFavorite', e.target.checked)} /> Favorite</label><label className="flex items-center gap-3 font-black"><input type="checkbox" checked={form.isPark} onChange={(e) => update('isPark', e.target.checked)} /> National/state park</label></div>
-        <button className="rounded-2xl border-3 border-ink bg-coral px-7 py-4 text-lg font-black text-white shadow-hard lg:col-span-2">Save adventure</button>
+        <div className="flex flex-wrap gap-6 border-t border-stone pt-5 lg:col-span-2"><label className="flex items-center gap-3 font-medium"><input type="checkbox" checked={form.isFavorite} onChange={(e) => update('isFavorite', e.target.checked)} /> Favorite</label><label className="flex items-center gap-3 font-medium"><input type="checkbox" checked={form.isPark} onChange={(e) => update('isPark', e.target.checked)} /> National/state park</label></div>
+        <button className="btn btn-primary btn-lg w-full lg:col-span-2 lg:w-auto lg:justify-self-start">Save adventure</button>
       </form>
     </>
   )
 }
 
 function Field({ label, children, wide = false }: { label: string; children: React.ReactNode; wide?: boolean }) {
-  return <label className={`block ${wide ? 'lg:col-span-2' : ''}`}><span className="mb-2 block font-black">{label}</span><div className="form-field">{children}</div></label>
+  return <label className={`block ${wide ? 'lg:col-span-2' : ''}`}><span className="field-label">{label}</span><div className="form-field">{children}</div></label>
 }

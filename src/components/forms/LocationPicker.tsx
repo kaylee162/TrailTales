@@ -40,8 +40,8 @@ const scrapbookPin = new Icon({
     'data:image/svg+xml;charset=UTF-8,' +
     encodeURIComponent(`
       <svg width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
-        <path d="M21 39s13-12.2 13-24A13 13 0 1 0 8 15c0 11.8 13 24 13 24Z" fill="#f27c68" stroke="#2f241d" stroke-width="3"/>
-        <circle cx="21" cy="15" r="5" fill="#fff7df" stroke="#2f241d" stroke-width="2"/>
+        <path d="M21 39s13-12.2 13-24A13 13 0 1 0 8 15c0 11.8 13 24 13 24Z" fill="#c2521b" stroke="#16211b" stroke-width="2"/>
+        <circle cx="21" cy="15" r="5" fill="#f2ede3"/>
       </svg>
     `),
   iconSize: [42, 42],
@@ -127,10 +127,10 @@ export default function LocationPicker({
 
   return (
     <section className="lg:col-span-2">
-      <div className="mb-2 flex items-center justify-between gap-3">
+      <div className="mb-3 flex items-start justify-between gap-3 sm:items-center">
         <div>
-          <p className="font-black">Location pin</p>
-          <p className="text-sm font-bold text-ink/60">
+          <p className="field-label mb-1">Location pin</p>
+          <p className="field-hint">
             Search for a place, choose a result, or click directly on the map.
           </p>
         </div>
@@ -139,19 +139,19 @@ export default function LocationPicker({
           <button
             type="button"
             onClick={clearLocation}
-            className="rounded-full border-2 border-ink bg-white px-3 py-2 text-sm font-black shadow-hard-xs"
+            className="btn btn-outline min-h-9 px-3.5 text-sm"
           >
-            <X size={14} className="inline" /> Clear
+            <X size={14} /> Clear
           </button>
         )}
       </div>
 
-      <div className="scrapbook-card overflow-hidden bg-white shadow-hard-sm">
-        <div className="relative border-b-3 border-ink bg-paper p-4">
-          <div className="flex gap-3">
+      <div className="overflow-hidden rounded-2xl border border-stone bg-parchment">
+        <div className="relative border-b border-stone p-3">
+          <div className="flex gap-2 sm:gap-3">
             <div className="relative flex-1">
               <Search
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/55"
+                className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted"
                 size={20}
               />
 
@@ -165,29 +165,29 @@ export default function LocationPicker({
                   }
                 }}
                 placeholder="Try Tybee Island, Yosemite, Paris..."
-                className="w-full rounded-2xl border-2 border-ink bg-white py-3 pl-10 pr-4 font-bold outline-none focus:shadow-[0_0_0_4px_rgba(242,124,104,0.25)]"
+                className="input pl-11"
               />
             </div>
 
             <button
               type="button"
               onClick={searchLocation}
-              className="rounded-2xl border-2 border-ink bg-coral px-5 py-3 font-black text-white shadow-hard-xs"
+              className="btn btn-dark min-h-12 px-4 sm:px-5"
             >
               Search
             </button>
           </div>
 
           {(results.length > 0 || isSearching || error) && (
-            <div className="absolute left-4 right-4 top-[5.25rem] z-[900] overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
+            <div className="absolute left-3 right-3 top-[4.25rem] z-[900] overflow-hidden rounded-xl border border-stone bg-parchment shadow-soft">
               {isSearching && (
-                <p className="px-4 py-3 text-sm font-black text-ink/60">
+                <p className="px-4 py-3 text-sm font-medium text-muted">
                   Searching the map...
                 </p>
               )}
 
               {error && (
-                <p className="px-4 py-3 text-sm font-black text-coral">
+                <p className="px-4 py-3 text-sm font-medium text-blaze-dark">
                   {error}
                 </p>
               )}
@@ -197,10 +197,10 @@ export default function LocationPicker({
                   key={result.place_id}
                   type="button"
                   onClick={() => chooseResult(result)}
-                  className="flex w-full items-start gap-3 border-t border-ink/10 px-4 py-3 text-left hover:bg-sun/20"
+                  className="flex w-full items-start gap-3 border-t border-stone px-4 py-3 text-left first:border-t-0 hover:bg-sand"
                 >
-                  <MapPin className="mt-0.5 shrink-0 text-coral" size={18} />
-                  <span className="font-bold">{result.display_name}</span>
+                  <MapPin className="mt-0.5 shrink-0 text-blaze" size={18} />
+                  <span className="font-medium">{result.display_name}</span>
                 </button>
               ))}
             </div>
@@ -211,7 +211,7 @@ export default function LocationPicker({
           center={selectedPosition ?? DEFAULT_CENTER}
           zoom={selectedPosition ? 10 : 5}
           scrollWheelZoom={false}
-          className="travel-map h-[21.25rem] w-full"
+          className="travel-map h-72 w-full sm:h-[21.25rem]"
         >
           <TileLayer
             attribution='&copy; OpenStreetMap contributors'
@@ -230,7 +230,7 @@ export default function LocationPicker({
       </div>
 
       {(location || latitude || longitude) && (
-        <div className="mt-3 rounded-2xl border-2 border-ink bg-sage/25 px-4 py-3 text-sm font-bold">
+        <div className="mt-3 rounded-xl bg-sand px-4 py-3 font-mono text-xs leading-relaxed text-body">
           Picked: {location || 'Custom map point'}
           {state ? ` · ${state}` : ''}
           {country ? ` · ${country}` : ''}

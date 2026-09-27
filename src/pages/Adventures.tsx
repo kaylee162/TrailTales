@@ -29,20 +29,20 @@ export default function Adventures() {
 
   return (
     <>
-      <PageHeader eyebrow="all entries" title="Adventure pages" description="Search, filter, and sort every trip in your journal." action={<Link to="/adventures/new" className="inline-flex items-center gap-2 rounded-2xl border-3 border-ink bg-coral px-5 py-3 font-black text-white shadow-hard-sm"><Plus size={18} /> New adventure</Link>} />
+      <PageHeader eyebrow="all entries" title="Adventure pages" description="Search, filter, and sort every trip in your journal." action={<Link to="/adventures/new" className="btn btn-dark btn-lg"><Plus size={18} /> New adventure</Link>} />
 
-      <section className="scrapbook-card mb-8 grid gap-4 bg-paper p-5 md:grid-cols-[1fr_auto_auto]">
-        <label className="flex items-center gap-3 rounded-2xl border-2 border-ink bg-white px-4 py-3 font-bold"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search titles, places, tags..." className="w-full bg-transparent outline-none" /></label>
-        <select value={category} onChange={(event) => setCategory(event.target.value as AdventureCategory | 'all')} className="rounded-2xl border-2 border-ink bg-white px-4 py-3 font-bold">
+      <section className="panel mb-8 grid gap-3 p-3 md:grid-cols-[1fr_auto_auto]">
+        <label className="input flex items-center gap-3"><Search size={18} className="shrink-0 text-muted" /><span className="sr-only">Search adventures</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search titles, places, tags..." className="w-full bg-transparent outline-none placeholder:text-[#8a8f84]" /></label>
+        <select aria-label="Filter by category" value={category} onChange={(event) => setCategory(event.target.value as AdventureCategory | 'all')} className="input font-medium md:w-52">
           <option value="all">All categories</option>
           {adventureCategories.map((item) => <option key={item} value={item}>{categoryLabels[item]}</option>)}
         </select>
-        <select value={sort} onChange={(event) => setSort(event.target.value as SortMode)} className="rounded-2xl border-2 border-ink bg-white px-4 py-3 font-bold">
+        <select aria-label="Sort adventures" value={sort} onChange={(event) => setSort(event.target.value as SortMode)} className="input font-medium md:w-48">
           <option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="miles">Most miles</option><option value="favorites">Favorites first</option>
         </select>
       </section>
 
-      {filtered.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((adventure) => <AdventureCard key={adventure.id} adventure={adventure} />)}</div> : <div className="scrapbook-card p-10 text-center"><h2 className="text-3xl font-black">No matching adventures</h2><p className="mt-2 font-semibold text-ink/70">Try clearing your filters or add a new entry.</p></div>}
+      {filtered.length ? <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.map((adventure) => <AdventureCard key={adventure.id} adventure={adventure} />)}</div> : <div className="panel px-8 py-14 text-center"><h2 className="font-display text-3xl font-medium">No matching adventures</h2><p className="mt-2 text-muted">Try clearing your filters or add a new entry.</p></div>}
     </>
   )
 }

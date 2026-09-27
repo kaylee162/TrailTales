@@ -3,7 +3,8 @@ import { motion } from 'framer-motion'
 import { Calendar, Camera, Heart, MapPinned, Mountain, Sparkles, Star } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import { useAdventures } from '../context/AdventureContext'
-import { categoryEmoji, categoryLabels } from '../lib/constants'
+import { categoryLabels } from '../lib/constants'
+import TopoLines from '../components/ui/TopoLines'
 import { FALLBACK_ADVENTURE_PHOTO } from '../lib/placeholders'
 import type { Adventure } from '../types/adventure'
 
@@ -94,8 +95,9 @@ function WrappedRecap({ recap, period, mode }: { recap: WrappedRecapData; period
       <motion.article
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
-        className="wrapped-hero-card scrapbook-card"
+        className="wrapped-hero-card"
       >
+        <TopoLines className="-bottom-72 -left-40 w-[820px]" color="#b9c27e" opacity={0.16} />
         <div className="wrapped-hero-copy">
           <p className="wrapped-kicker">{mode === 'year' ? 'Year in review' : 'Month in review'}</p>
           <h2>{period.label}</h2>
@@ -135,11 +137,11 @@ function WrappedRecap({ recap, period, mode }: { recap: WrappedRecapData; period
       <WrappedHighlight
         title="Most logged vibe"
         icon={<Calendar size={24} />}
-        value={recap.topCategory ? `${categoryEmoji[recap.topCategory]} ${categoryLabels[recap.topCategory]}` : 'No category yet'}
+        value={recap.topCategory ? categoryLabels[recap.topCategory] : 'No category yet'}
         text={recap.topCategory ? `${recap.categoryCount} adventure${recap.categoryCount === 1 ? '' : 's'} in this category.` : 'Categories will appear here once you log more trips.'}
       />
 
-      <article className="wrapped-memory-strip scrapbook-card">
+      <article className="wrapped-memory-strip panel">
         <div>
           <p className="wrapped-kicker">Memory strip</p>
           <h3>Top snapshots</h3>
@@ -169,7 +171,7 @@ function WrappedStat({ icon, label, value }: { icon: React.ReactNode; label: str
 
 function WrappedHighlight({ title, icon, value, text }: { title: string; icon: React.ReactNode; value: string; text: string }) {
   return (
-    <motion.article initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="wrapped-highlight scrapbook-card">
+    <motion.article initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="wrapped-highlight panel">
       <div className="wrapped-highlight-icon">{icon}</div>
       <p className="wrapped-kicker">{title}</p>
       <h3>{value}</h3>
@@ -180,8 +182,8 @@ function WrappedHighlight({ title, icon, value, text }: { title: string; icon: R
 
 function EmptyWrapped() {
   return (
-    <article className="wrapped-empty scrapbook-card">
-      <Sparkles size={44} />
+    <article className="wrapped-empty panel">
+      <Sparkles size={40} strokeWidth={1.6} />
       <h2>Your wrapped is waiting for its first adventure.</h2>
       <p>Once you log a few trips, this page will automatically make monthly and yearly recaps with your miles, photos, favorite moments, and top adventure style.</p>
     </article>

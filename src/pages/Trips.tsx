@@ -14,12 +14,14 @@ export default function Trips() {
       <PageHeader eyebrow="collections" title="Trip collections" description="Starter grouping by state or country. Later, turn this into custom road trips with ordered stops and route lines." />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {Object.entries(grouped).map(([place, items]) => (
-          <article key={place} className="scrapbook-card bg-paper p-5">
-            <div className="grid grid-cols-3 gap-2">
-              {items.slice(0, 3).map((item) => <img key={item.id} src={item.coverPhoto || item.photos[0]} alt="" className="h-28 rounded-2xl border-2 border-ink object-cover" />)}
+          <article key={place} className="panel p-3">
+            <div className="grid grid-cols-3 gap-1.5 overflow-hidden rounded-xl">
+              {items.slice(0, 3).map((item) => <img key={item.id} src={item.coverPhoto || item.photos[0]} alt="" className="h-28 w-full bg-sand object-cover" />)}
             </div>
-            <h2 className="mt-5 text-3xl font-black">{place}</h2>
-            <p className="mt-2 font-bold text-ink/70">{items.length} stops · {items.reduce((sum, item) => sum + item.miles, 0).toFixed(1)} miles</p>
+            <div className="px-2 pb-2 pt-5">
+              <h2 className="font-display text-[26px] font-medium sm:text-3xl">{place}</h2>
+              <p className="data-label mt-2">{items.length} stops · {items.reduce((sum, item) => sum + item.miles, 0).toFixed(1)} miles</p>
+            </div>
           </article>
         ))}
       </div>

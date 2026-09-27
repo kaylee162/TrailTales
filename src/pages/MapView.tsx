@@ -4,7 +4,9 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { Icon } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import PageHeader from '../components/ui/PageHeader'
-import { categoryEmoji } from '../lib/constants'
+import { MapPinned } from 'lucide-react'
+import { categoryLabels } from '../lib/constants'
+import CategoryIcon from '../components/ui/CategoryIcon'
 import { useAdventures } from '../context/AdventureContext'
 import { FALLBACK_ADVENTURE_PHOTO } from '../lib/placeholders'
 
@@ -13,8 +15,8 @@ const scrapbookPin = new Icon({
     'data:image/svg+xml;charset=UTF-8,' +
     encodeURIComponent(`
       <svg width="42" height="42" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
-        <path d="M21 39s13-12.2 13-24A13 13 0 1 0 8 15c0 11.8 13 24 13 24Z" fill="#f27c68" stroke="#2f241d" stroke-width="3"/>
-        <circle cx="21" cy="15" r="5" fill="#fff7df" stroke="#2f241d" stroke-width="2"/>
+        <path d="M21 39s13-12.2 13-24A13 13 0 1 0 8 15c0 11.8 13 24 13 24Z" fill="#c2521b" stroke="#16211b" stroke-width="2"/>
+        <circle cx="21" cy="15" r="5" fill="#f2ede3"/>
       </svg>
     `),
   iconSize: [42, 42],
@@ -49,12 +51,12 @@ export default function MapView() {
       />
 
       <section className="grid gap-6 lg:grid-cols-[1fr_360px]">
-        <div className="scrapbook-card overflow-hidden bg-mapblue p-3">
+        <div className="overflow-hidden rounded-2xl border border-stone bg-parchment p-2">
           <MapContainer
             center={mapCenter}
             zoom={adventuresWithPins.length ? 6 : 5}
             scrollWheelZoom
-            className="travel-map h-[590px] w-full rounded-[2rem] border-3 border-ink"
+            className="travel-map h-[360px] w-full rounded-xl md:h-[590px]"
           >
             <TileLayer
               attribution='&copy; OpenStreetMap contributors'
@@ -72,10 +74,8 @@ export default function MapView() {
               >
                 <Popup>
                   <div className="max-w-[220px]">
-                    <p className="font-black">
-                      {categoryEmoji[adventure.category]} {adventure.title}
-                    </p>
-                    <p>{adventure.location}</p>
+                    <p className="font-display text-base font-semibold">{adventure.title}</p>
+                    <p className="!my-1 text-muted">{adventure.location}</p>
                   </div>
                 </Popup>
               </Marker>
@@ -83,35 +83,38 @@ export default function MapView() {
           </MapContainer>
         </div>
 
-        <aside className="scrapbook-card bg-paper p-5">
+        <aside className="panel self-start overflow-hidden">
           {active ? (
             <>
               <img
                 src={active.coverPhoto || active.photos[0] || FALLBACK_ADVENTURE_PHOTO}
                 alt={active.title}
-                className="h-56 w-full rounded-3xl border-3 border-ink object-cover"
+                className="h-44 w-full object-cover sm:h-56"
               />
 
-              <p className="sticker mt-5 inline-flex px-3 py-1 text-sm font-black">
-                {categoryEmoji[active.category]} pinned stop
+              <div className="p-5 sm:p-6">
+              <p className="chip chip-spruce">
+                <CategoryIcon category={active.category} size={14} strokeWidth={2} />
+                {categoryLabels[active.category]} · pinned stop
               </p>
 
-              <h2 className="mt-4 text-3xl font-black">{active.title}</h2>
-              <p className="mt-2 font-bold text-ink/70">{active.location}</p>
-              <p className="mt-4 leading-7 text-ink/75">{active.description}</p>
+              <h2 className="mt-4 font-display text-[26px] font-medium leading-tight sm:text-3xl">{active.title}</h2>
+              <p className="mt-2 text-sm font-medium text-muted">{active.location}</p>
+              <p className="mt-4 leading-relaxed text-body">{active.description}</p>
 
               <Link
                 to={`/adventures/${active.id}`}
-                className="mt-6 inline-block rounded-2xl border-2 border-ink bg-coral px-5 py-3 font-black text-white shadow-hard-xs"
+                className="btn btn-primary mt-6 w-full sm:w-auto"
               >
                 Open page
               </Link>
+              </div>
             </>
           ) : (
-            <div className="rounded-3xl border-2 border-dashed border-ink/40 bg-white/70 p-6 text-center">
-              <p className="text-4xl">🗺️</p>
-              <p className="mt-3 font-black">No map pins yet.</p>
-              <p className="mt-2 text-sm font-bold text-ink/60">
+            <div className="flex flex-col items-center p-8 text-center">
+              <span className="grid h-14 w-14 place-items-center rounded-full bg-spruce text-bone"><MapPinned size={26} /></span>
+              <p className="mt-4 font-display text-2xl font-medium">No map pins yet.</p>
+              <p className="mt-2 text-sm text-muted">
                 Add or edit an adventure and choose a location.
               </p>
             </div>

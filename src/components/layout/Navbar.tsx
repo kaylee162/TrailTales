@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
-import { MapPinned, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
+import BrandMark from '../ui/BrandMark'
 
 const links = [
   { label: 'Dashboard', path: '/dashboard' },
@@ -11,34 +12,32 @@ const links = [
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-[1000] border-b-4 border-ink bg-cream/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-4">
-        <Link to="/" className="flex items-center gap-2 text-xl font-black tracking-tight">
-          <span className="grid h-11 w-11 place-items-center rounded-full border-3 border-ink bg-sun shadow-hard-sm">
-            <MapPinned size={23} />
-          </span>
+    <nav className="sticky top-0 z-[1000] bg-spruce text-bone">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-x-8 px-5 md:h-[76px]">
+        <Link to="/" className="flex items-center gap-2.5 font-display text-xl font-semibold tracking-tight md:gap-3 md:text-[22px]">
+          <BrandMark size="responsive" />
           TrailTales
         </Link>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="hidden h-full gap-7 md:flex">
           {links.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
-              className={({ isActive }) =>
-                `rounded-full border-2 border-ink px-4 py-2 text-sm font-bold shadow-hard-xs transition hover:-translate-y-0.5 ${
-                  isActive ? 'bg-coral text-white' : 'bg-paper'
+              className={({ isActive }: { isActive: boolean }) =>
+                `flex h-full shrink-0 items-center border-b-[3px] pt-[3px] text-[15px] transition-colors ${
+                  isActive ? 'border-blaze font-semibold text-bone' : 'border-transparent font-medium text-bone/70 hover:text-bone'
                 }`
               }
             >
               {link.label}
             </NavLink>
           ))}
-
-          <Link to="/adventures/new" className="inline-flex items-center gap-2 rounded-full border-2 border-ink bg-forest px-4 py-2 text-sm font-bold text-white shadow-hard-xs transition hover:-translate-y-0.5">
-            <Plus size={16} /> Add
-          </Link>
         </div>
+
+        <Link to="/adventures/new" className="btn btn-primary hidden md:inline-flex">
+          <Plus size={16} strokeWidth={2.4} /> Add
+        </Link>
       </div>
     </nav>
   )
